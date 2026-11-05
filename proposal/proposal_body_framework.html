@@ -1,0 +1,30 @@
+<h1>Distributed Computing Engine: A Resilient Mini-Framework for Cryptographic Forensics</h1>
+<p class="meta"><b>Project Proposal</b> &middot; Parallel &amp; Distributed Computing &middot; Instructor: Dr. Mohammed Alaa Ala&rsquo;anzy</p>
+<p class="meta"><b>Group:</b> Atabek Bakhytzhanov (240107104) &middot; Begzhan Imangali (240107042) &middot; Karzhaubay Bakdaulet (240107105) &middot; Yerkebulan Kenzhegali (240107051) &middot; Madiyar Yerlanuly (240107040)</p>
+
+<h2>1. Motivation and Research Question</h2>
+<p>In distributed computing, most projects merely write a static program that utilizes MPI libraries. However, production environments (like Slurm or Apache Spark) require an underlying <b>fault-tolerant framework</b> that actively schedules tasks, mitigates crashes, and maximizes local CPU performance [4]. We propose building <i>Mini-Spark</i>: a custom C-based distributed execution engine leveraging OpenMP SIMD instructions and MPI asynchronous communication. To benchmark the engine, we will deploy a computationally bound demo application: a distributed SHA-256 cryptographic brute-forcer for digital investigations [3]. <b>We ask: How effectively can a custom distributed framework isolate network logic (asynchronous MPI) from compute logic (OpenMP SIMD), and what is the exact recovery overhead when utilizing replication-based fault tolerance compared to crash-intolerant MPI implementations [1, 2]?</b></p>
+
+<h2>2. Hypotheses</h2>
+<p><b>H1 (Hardware-Agnostic CPU Acceleration):</b> By decoupling the compute engine and explicitly utilizing advanced OpenMP SIMD directives (<tt>#pragma omp simd</tt>) instead of relying on GPUs, the framework will achieve near 95% CPU utilization on heterogeneous x86 architectures, drastically outperforming scalar multi-threading [5].<br/>
+<b>H2 (Failure Masking via Checkpointing):</b> If a worker node goes offline (simulated network failure), the fault-tolerance daemon will detect the lost heartbeat within 500ms. By maintaining distributed checkpoints, the scheduler will reassign the lost chunk with a maximum performance penalty of 15% during the recovery epoch.<br/>
+<b>H3 (Dynamic Load Balancing):</b> An adaptive scheduler will maintain &gt;90% weak-scaling efficiency across 4 asymmetric worker nodes by dynamically shrinking task chunks for slower nodes, outperforming static MPI distributions.</p>
+
+<h2>3. Methodology</h2>
+<p><b>Architecture &amp; Implementation (C/C++):</b> We completely abandon CUDA and build a 5-tier architecture purely for CPU clusters. <b>(i) The Scheduler:</b> Manages a dynamic task queue using chunk-based load balancing. <b>(ii) Network Engine:</b> Uses strictly non-blocking MPI collectives (<tt>MPI_Isend</tt>, <tt>MPI_Irecv</tt>) to avoid deadlocks. <b>(iii) Fault Tolerance:</b> A dedicated daemon that listens for node heartbeats and manages state checkpoints [2]. <b>(iv) OpenMP Engine:</b> Local worker daemon that utilizes OpenMP threads and AVX2 vectorization to compute the payload. <b>(v) Demo Application:</b> A forensic password cracker that feeds hashes into the framework [3]. <b>Validation:</b> We will run the cluster on 5 distinct laptops, actively disconnecting computers from the Wi-Fi network mid-execution to prove the resilience algorithms.</p>
+
+<h2>4. Team Roles and Timeline</h2>
+<p><b>S1 (Scheduler):</b> Dynamic load balancer and master task queue &middot; <b>S2 (Network):</b> Asynchronous MPI engine and heartbeats &middot; <b>S3 (Rescuer):</b> Checkpointing and Fault-tolerance state recovery &middot; <b>S4 (Accelerator):</b> Advanced OpenMP/SIMD execution engine &middot; <b>S5 (Data Sci):</b> Cryptography payload integration and scaling analytics.</p>
+<table>
+<tr><td><b>W6-W7</b></td><td>Architecture design; Serial cryptography logic; Basic network skeleton.</td><td><b>W11</b></td><td>Fault Tolerance (H2): Heartbeats and Checkpoint recovery implementation.</td></tr>
+<tr><td><b>W8</b></td><td>OpenMP SIMD engine (H1); Asynchronous MPI messaging design.</td><td><b>W12</b></td><td>Buffer (Exam 2); Integration of all 5 physical laptops via WLAN MPI.</td></tr>
+<tr><td><b>W9</b></td><td>Dynamic Scheduler implementation (H3); chunk size tuning.</td><td><b>W13</b></td><td>Chaos testing: physically disconnecting nodes to trigger the Rescuer engine.</td></tr>
+<tr><td><b>W10</b></td><td><b>Progress report</b>: CPU/SIMD scaling baseline (without failures).</td><td><b>W14-W15</b></td><td>Final report submission, presentation, and live 5-laptop cluster demo.</td></tr>
+</table>
+
+<h2>References (Strictly 2024&ndash;2026)</h2>
+<p class="refs">[1] N. Ali <i>et al.</i>, &ldquo;FTHP-MPI: Towards Providing Replication-based Fault Tolerance in a Fault-Intolerant Native MPI Library,&rdquo; arXiv:2504.09989, 2025.<br/>
+[2] J. Edwards <i>et al.</i>, &ldquo;The Case for ABI Interoperability in a Fault Tolerant MPI,&rdquo; arXiv:2503.11138, 2025.<br/>
+[3] K. Wang <i>et al.</i>, &ldquo;Optimizing Password Cracking for Digital Investigations,&rdquo; arXiv:2504.03347, 2025.<br/>
+[4] M. Rossi <i>et al.</i>, &ldquo;Towards an Adaptive Runtime System for Cloud-Native HPC,&rdquo; arXiv:2603.14630, 2026.<br/>
+[5] S. Johnson <i>et al.</i>, &ldquo;Parallelizing the Factorial Space: Multi-Core OpenMP Scaling and Scalable SIMD Acceleration,&rdquo; arXiv:2609.07862, 2026.</p>
