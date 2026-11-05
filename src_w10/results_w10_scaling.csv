@@ -1,0 +1,10 @@
+experiment,threads_or_nodes,hashes,time_sec,throughput_mhs,speedup,efficiency_pct
+strong_cpu,1,2000000,0.8389,2.38,1.00,100.00
+strong_cpu,2,2000000,0.4390,4.56,1.91,95.54
+strong_cpu,4,2000000,0.2602,7.69,3.22,80.60
+strong_cpu,6,2000000,0.2131,9.38,3.94,65.61
+strong_cpu,8,2000000,0.1883,10.62,4.46,55.69
+weak_cluster,1,1000000,0.0861,11.61,1.00,100.00
+weak_cluster,2,2000000,0.0877,22.82,2.00,98.23
+weak_cluster,3,3000000,0.0892,33.63,3.00,96.53
+weak_cluster,4,4000000,0.0908,44.07,4.00,94.88
