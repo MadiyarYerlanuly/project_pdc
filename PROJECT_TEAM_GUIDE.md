@@ -1,4 +1,4 @@
-# 🚀 Полный гайд по проекту для команды
+
 **Предмет:** Parallel & Distributed Computing (Dr. Mohammed Alaa Ala'anzy)  
 **Название проекта:** *Distributed Computing Engine: A Resilient Mini-Framework for Cryptographic Forensics*  
 
@@ -75,39 +75,3 @@
 Чтобы Мастер не был уязвимым местом (*Single Point of Failure*), **Ноутбук №2 (`Rank 1`)** работает как **Shadow Master (Заместитель)**. Мастер постоянно скидывает ему копию таблицы задач. Если Ноутбук №1 отключается, Ноутбук №2 замечает тишину, берет управление на себя и становится новым Мастером!
 
 ---
-
-## 4. Точное распределение ролей (Кто за что отвечает)
-
-Каждый из 5 участников отвечает за свой независимый модуль:
-
-* 👨‍💻 **S1 — Atabek Bakhytzhanov (`The Scheduler`):**
-  * Отвечает за логику Мастера: генерация пространства паролей, нарезка на чанки (Chunks), динамическая очередь задач (`Task Queue`) и раздача заданий свободным ноутбукам.
-* 👨‍💻 **S2 — Begzhan Imangali (`The Networker`):**
-  * Отвечает за сетевой движок на **MPI**: настройка асинхронной передачи сообщений (`MPI_Isend` / `MPI_Irecv` / `MPI_Iprobe`), чтобы сеть никогда не зависала, и отправка фоновых сигналов пульса (`Heartbeat`).
-* 👨‍💻 **S3 — Karzhaubay Bakdaulet (`The Rescuer`):**
-  * Отвечает за **Fault Tolerance (Отказоустойчивость)**: отслеживание таймаутов пульса, сохранение чекпоинтов (`Checkpointing`), возврат недосчитанных кусков в очередь при сбое Воркера, а также логика заместителя Мастера (`Shadow Master`).
-* 👨‍💻 **S4 — Yerkebulan Kenzhegali (`The Accelerator`):**
-  * Отвечает за вычислительное ядро Воркера: инициализация **OpenCL** (поиск любой видеокарты: Intel / Mac / AMD / NVIDIA, переброс вычислений на GPU) + **OpenMP** для подготовки данных на CPU и базового сравнения скорости.
-* 👨‍💻 **S5 — Madiyar Yerlanuly (`Data Scientist & Crypto Payload`):**
-  * Отвечает за саму реализацию алгоритма хэширования **SHA-256** (на C и внутри ядра OpenCL), проверку правильности нахождения пароля, замеры времени и построение графиков ускорения (*Speedup, Strong/Weak Scaling, Recovery Overhead*) для отчетов.
-
----
-
-## 5. ПЛАН НА СЕГОДНЯ И ЗАВТРА (Обязательно к прочтению!)
-
-### Задача №1 (На сегодня для всех):
-1. Прочитать этот документ и **утвердить свою роль** (S1–S5), чтобы каждый понимал, как работает его модуль и вся система в целом.
-2. Посмотреть наш утвержденный [Project_Proposal_Framework.pdf](file:///C:/Users/User/.gemini/antigravity/scratch/nbody-project/proposal/Project_Proposal_Framework.pdf), чтобы знать наши 3 гипотезы (H1 — ускорение вычислений, H2 — спасение при сбое за 500 мс с потерей скорости не более 15%, H3 — динамическая балансировка нагрузки).
-3. Проверить, какие у кого ноутбуки (процессор, ОС: Windows/Mac/Linux и какая стоит встроенная или дискретная видеокарта).
-
-### Задача №2 (На завтрашнюю встречу с преподавателем):
-Преподаватель уже одобрил наш Proposal, где написаны **MPI + OpenMP**. Завтра нужно показать ему, что мы глубоко продумали проект, и **согласовать небольшое улучшение — добавление OpenCL для видеокарт**.
-
-⚠️ **ВАЖНО:** Не говорите преподавателю, что мы «убираем OpenMP»! Скажите, что мы **оставляем и MPI, и OpenMP**, но сверху **добавляем OpenCL**, чтобы перекинуть тяжелый счет на видеокарты.
-
-#### 💬 Готовая речь для преподавателя на завтра (можно сказать своими словами или на английском):
-> **На русском (суть):**  
-> *«Профессор, спасибо за одобрение нашего проекта! Мы начали проектировать систему и заметили важную инженерную деталь: если процессор (CPU) ноутбука загружен на 100% перебором хэшей, операционная система начинает тормозить и задерживать отправку сетевых сигналов пульса (MPI Heartbeats), из-за чего случаются ложные тревоги о сбое. Кроме того, у нас в команде разные ноутбуки без NVIDIA (есть встроенная графика Intel, есть Mac). Поэтому мы хотим слегка дополнить наш проект: использовать **OpenCL**, чтобы перекидывать тяжелый расчет SHA-256 на **любую видеокарту** (Intel, Apple, AMD), оставляя процессор свободным для стабильной работы **MPI** и **Fault Tolerance**. А **OpenMP** мы используем для параллельной подготовки данных и как базовую линию (CPU Baseline) для сравнения скорости CPU против GPU в отчете. Можно ли нам внести это дополнение?»*
->
-> **In English (to tell the Professor directly):**  
-> *"Professor, as we started testing our approved architecture, we noticed an important system bottleneck: when the laptop CPU is loaded at 100% with SHA-256 hashing, the OS experiences thread starvation and delays our asynchronous MPI Heartbeats, causing false-positive crash detections. Also, since our team has heterogeneous laptops without NVIDIA GPUs (Intel integrated graphics, Mac, etc.), we would like to slightly extend our worker engine with **OpenCL**. This lets us offload the heavy hashing onto **any laptop's GPU** while keeping the CPU responsive for MPI communication, dynamic scheduling, and checkpointing. We still keep **OpenMP (with SIMD)** for multi-threaded batch preparation and as our CPU baseline to benchmark against GPU offloading in our Progress Report. Is it okay if we include this enhancement?"*
