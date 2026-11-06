@@ -1,4 +1,4 @@
-# 🚀 Distributed Computing Engine: A Resilient Mini-Framework for Cryptographic Forensics
+#  Distributed Computing Engine: A Resilient Mini-Framework for Cryptographic Forensics
 
 **Course:** Parallel & Distributed Computing (Instructor: Dr. Mohammed Alaa Ala'anzy)  
 **Project Architecture:** Mini-Spark C/C++ Resilient Engine (MPI + OpenMP SIMD + Universal OpenCL GPU Offloading)
