@@ -15,7 +15,6 @@
 | **S4 (The Accelerator)** | **Yerkebulan Kenzhegali** | `240107051` | Universal GPU Offloading (**OpenCL**) + Multi-core CPU (**OpenMP + SIMD**) (H1) |
 | **S5 (Data Sci & Crypto)** | **Madiyar Yerlanuly** | `240107040` | NIST SHA-256 payload, forensic verification, performance & scaling analytics |
 
- **Полный гайд для команды (на русском):** [PROJECT_TEAM_GUIDE.md](./PROJECT_TEAM_GUIDE.md)  
  **Approved Project Proposal (PDF):** [proposal/Project_Proposal_Framework.pdf](./proposal/Project_Proposal_Framework.pdf)  
  **Week 10 Progress Report (PDF):** [proposal/Progress_Report_W10.pdf](./proposal/Progress_Report_W10.pdf) | [Markdown](./src_w10/PROGRESS_REPORT_W10.md)
 
