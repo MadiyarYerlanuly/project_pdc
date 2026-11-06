@@ -5,7 +5,7 @@
 
 ---
 
-## 👥 Team Members & Modules
+##  Team Members & Modules
 
 | Role | Student Name | ID | Module Responsibility |
 | :--- | :--- | :--- | :--- |
@@ -15,13 +15,13 @@
 | **S4 (The Accelerator)** | **Yerkebulan Kenzhegali** | `240107051` | Universal GPU Offloading (**OpenCL**) + Multi-core CPU (**OpenMP + SIMD**) (H1) |
 | **S5 (Data Sci & Crypto)** | **Madiyar Yerlanuly** | `240107040` | NIST SHA-256 payload, forensic verification, performance & scaling analytics |
 
-📄 **Полный гайд для команды (на русском):** [PROJECT_TEAM_GUIDE.md](./PROJECT_TEAM_GUIDE.md)  
-📄 **Approved Project Proposal (PDF):** [proposal/Project_Proposal_Framework.pdf](./proposal/Project_Proposal_Framework.pdf)  
-📄 **Week 10 Progress Report (PDF):** [proposal/Progress_Report_W10.pdf](./proposal/Progress_Report_W10.pdf) | [Markdown](./src_w10/PROGRESS_REPORT_W10.md)
+ **Полный гайд для команды (на русском):** [PROJECT_TEAM_GUIDE.md](./PROJECT_TEAM_GUIDE.md)  
+ **Approved Project Proposal (PDF):** [proposal/Project_Proposal_Framework.pdf](./proposal/Project_Proposal_Framework.pdf)  
+ **Week 10 Progress Report (PDF):** [proposal/Progress_Report_W10.pdf](./proposal/Progress_Report_W10.pdf) | [Markdown](./src_w10/PROGRESS_REPORT_W10.md)
 
 ---
 
-## 📂 Repository Structure (Week-by-Week Progress: W6 – W10)
+##  Repository Structure (Week-by-Week Progress: W6 – W10)
 
 ```text
 project_pdc-/
@@ -53,7 +53,7 @@ project_pdc-/
 
 ---
 
-## 📊 Experimental Benchmarks (Measured on Intel Core i5-1135G7 + Intel Iris Xe GPU)
+##  Experimental Benchmarks (Measured on Intel Core i5-1135G7 + Intel Iris Xe GPU)
 
 ### 1. Strong Scaling & Hardware Acceleration (Hypothesis H1)
 To prevent **CPU starvation** (which delays MPI Heartbeats and freezes laptop OS threads), our engine reserves 2 CPU threads for networking/OS and offloads heavy SHA-256 brute-forcing to **any available GPU via OpenCL**:
@@ -73,7 +73,7 @@ To prevent **CPU starvation** (which delays MPI Heartbeats and freezes laptop OS
 
 ---
 
-## 🛠️ How to Build & Run
+##  How to Build & Run
 
 ### 1. Run Stage W6–W7 (Serial Baseline & NIST Validation)
 ```bash
