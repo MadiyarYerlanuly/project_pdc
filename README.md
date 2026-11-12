@@ -1,20 +1,20 @@
-# 🚀 Distributed Computing Engine: A Resilient Mini-Framework for Cryptographic Forensics
+# Distributed Computing Engine: A Resilient Mini-Framework for Cryptographic Forensics
 
 **Course:** Parallel & Distributed Computing (Instructor: Dr. Mohammed Alaa Ala'anzy)  
 **Architecture:** Mini-Spark C/C++ Resilient Engine (MPI + OpenMP SIMD + Universal OpenCL GPU Offloading)
 
 ---
 
-## 📚 Documentation & Reports
+## Documentation & Reports
 
-* 📘 **Technical Wiki & Web Spec (English):** [PROJECT_WIKI.md](./PROJECT_WIKI.md)
-* 📄 **Гайд по проекту (на русском):** [PROJECT_TEAM_GUIDE.md](./PROJECT_TEAM_GUIDE.md)
-* 📄 **Approved Project Proposal (PDF):** [proposal/Project_Proposal_Framework.pdf](./proposal/Project_Proposal_Framework.pdf)
-* 📄 **Week 10 Progress Report (PDF):** [proposal/Progress_Report_W10.pdf](./proposal/Progress_Report_W10.pdf) | [Markdown](./src_w10/PROGRESS_REPORT_W10.md)
+* **Technical Wiki & Web Spec (English):** [PROJECT_WIKI.md](./PROJECT_WIKI.md)
+* **Гайд по проекту (на русском):** [PROJECT_TEAM_GUIDE.md](./PROJECT_TEAM_GUIDE.md)
+* **Approved Project Proposal (PDF):** [proposal/Project_Proposal_Framework.pdf](./proposal/Project_Proposal_Framework.pdf)
+* **Week 10 Progress Report (PDF):** [proposal/Progress_Report_W10.pdf](./proposal/Progress_Report_W10.pdf) | [Markdown](./src_w10/PROGRESS_REPORT_W10.md)
 
 ---
 
-## 💡 Project Overview
+## Project Overview
 
 **Mini-Spark** is a fault-tolerant distributed execution engine built for heterogeneous laptop clusters. We evaluate the engine using a compute-intensive forensic task: **Distributed SHA-256 Password Recovery**.
 
@@ -26,7 +26,7 @@ Key engineering features:
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```text
 project_pdc-/
@@ -59,7 +59,7 @@ project_pdc-/
 
 ---
 
-## 📊 Experimental Benchmarks (Intel Core i5-1135G7 + Intel Iris Xe GPU)
+## Experimental Benchmarks (Intel Core i5-1135G7 + Intel Iris Xe GPU)
 
 ### 1. Strong Scaling & Hardware Acceleration (Hypothesis H1)
 
@@ -78,7 +78,7 @@ project_pdc-/
 
 ---
 
-## 🛠️ How to Build & Run
+## How to Build & Run
 
 **1. Stage W6–W7 (Serial Baseline & NIST Validation):**
 ```bash
