@@ -33,8 +33,6 @@ project_pdc-/
 ├── README.md                          # Project overview, benchmarks & run instructions
 ├── PROJECT_WIKI.md                    # Technical Wiki & Backend/Frontend functional requirements
 ├── PROJECT_TEAM_GUIDE.md              # Project overview in Russian
-├── run_all_demo.py                    # One-click cross-platform launcher for all stages (W6-W10)
-├── run_all_demo.bat                   # Windows one-click batch launcher
 ├── proposal/
 │   ├── Project_Proposal_Framework.pdf # Approved 1-page Project Proposal
 │   └── Progress_Report_W10.pdf        # Official Week 10 Progress Report (1-page PDF)
@@ -81,14 +79,6 @@ project_pdc-/
 ---
 
 ## 🛠️ How to Build & Run
-
-### Run All Stages Automatically (Recommended)
-```bash
-python run_all_demo.py
-```
-*(On Windows, you can also double-click `run_all_demo.bat`).*
-
-### Run Individual Stages Manually
 
 **1. Stage W6–W7 (Serial Baseline & NIST Validation):**
 ```bash
