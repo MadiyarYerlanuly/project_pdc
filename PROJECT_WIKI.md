@@ -44,6 +44,12 @@ Each chunk in the Master queue passes through four logical states:
 * **src_w8_w9:** Contains the multi-core OpenMP + SIMD execution logic (with the Anti-Choke thread limiter), the dynamic load-balancing scheduler, and the universal OpenCL GPU kernel and runner.
 * **src_w10:** Contains the automated Strong Scaling (1 to 8 threads) and Weak Scaling (1 to 4 nodes) benchmark suite and the exported CSV metrics.
 
+### 3.4 Network & Local Hardware Execution Model (Why It Runs on a Local Port)
+Because a browser tab is sandboxed and a cloud-hosted server (like Vercel or Render) cannot access the physical CPU cores or GPUs of our 5 laptops, the system **must run locally on our machines over a shared Wi-Fi / LAN network**:
+1. **Local Backend Server on the Master Laptop:** The web server and backend run on a local port of the Master laptop (bound to `0.0.0.0:PORT`, e.g., `http://localhost:8000` locally, and accessible to the other 4 laptops via the Master's Wi-Fi IP such as `http://192.168.x.x:8000`).
+2. **Direct Hardware Access on Each Node:** Running the backend/worker process natively on each laptop allows the OS to directly invoke our compiled C binaries (to control CPU cores via OpenMP + SIMD) and the system's OpenCL driver (to offload SHA-256 hashing onto the laptop's integrated or discrete GPU).
+3. **Multi-Laptop Wi-Fi Communication:** All 5 laptops connect to the same Wi-Fi hotspot. Worker laptops connect to the Master's local IP and port to register their hardware capabilities, pull chunk ranges (`start_index` to `end_index`), execute the C / OpenCL computation on their own local CPU/GPU, and send back 500ms heartbeats and results with ultra-low local network latency.
+
 ---
 
 ## 4. Functional Requirements for Backend & Frontend
