@@ -3,11 +3,11 @@
 **Название проекта:** *Distributed Computing Engine: A Resilient Mini-Framework for Cryptographic Forensics*  
 
 **Состав команды:**
-1. **Atabek Bakhytzhanov** (240107104) — *S1: The Scheduler (Планировщик и Балансировщик)*
-2. **Begzhan Imangali** (240107042) — *S2: The Networker (Асинхронная сеть MPI и Пульс)*
-3. **Karzhaubay Bakdaulet** (240107105) — *S3: The Rescuer (Отказоустойчивость и Чекпоинты)*
-4. **Yerkebulan Kenzhegali** (240107051) — *S4: The Accelerator (Ускоритель GPU OpenCL + CPU OpenMP)*
-5. **Madiyar Yerlanuly** (240107040) — *S5: Data Scientist & Crypto Payload (Алгоритм SHA-256 и Аналитика)*
+1. **Atabek Bakhytzhanov** (240107104)
+2. **Begzhan Imangali** (240107042) 
+3. **Karzhaubay Bakdaulet** (240107105) 
+4. **Yerkebulan Kenzhegali** (240107051) 
+5. **Madiyar Yerlanuly** (240107040)
 
 ---
 
