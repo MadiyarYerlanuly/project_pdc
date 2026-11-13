@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-Spark · Cluster Control Center</title>
+  <meta name="description" content="Fault-tolerant distributed SHA-256 recovery engine — live cluster control center.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2300B8A9'/%3E%3Cstop offset='1' stop-color='%235B5BF0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='9' fill='url(%23g)'/%3E%3Cpath d='M17.5 5 9 18h6l-1.5 9L23 14h-6z' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span></div>
+
+  <header class="topbar glass">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00B8A9"/><stop offset="1" stop-color="#5B5BF0"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#lg)"/><path d="M17.5 5 9 18h6l-1.5 9L23 14h-6z" fill="#fff"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">Mini-Spark</div>
+        <div class="brand-sub">Cluster Control Center</div>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-view="control" role="tab">Control Center</button>
+      <button class="tab" data-view="nodes" role="tab">Nodes</button>
+      <button class="tab" data-view="bench" role="tab">Benchmarks</button>
+    </nav>
+    <div class="top-right">
+      <span id="jobPill" class="pill">Idle</span>
+      <button id="connPill" class="pill conn" title="Backend settings"><i class="dot"></i><span>Connecting…</span></button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================================================= CONTROL CENTER -->
+    <section id="view-control" class="view active">
+      <div class="grid">
+        <!-- Job configuration -->
+        <article class="card glass job-card">
+          <header class="card-h"><h2>Job</h2><span class="hint">Target &amp; keyspace</span></header>
+
+          <div class="seg" id="targetSeg">
+            <button class="active" data-t="hash">Hash</button>
+            <button data-t="file">File</button>
+            <button data-t="test">Test password</button>
+          </div>
+
+          <div class="tpanel active" data-t="hash">
+            <label class="fld">
+              <span>Target SHA-256</span>
+              <textarea id="hashInput" rows="2" spellcheck="false" placeholder="64 hex characters, e.g. 5e8848…"></textarea>
+            </label>
+          </div>
+          <div class="tpanel" data-t="file">
+            <label class="drop" id="dropZone">
+              <input type="file" id="fileInput" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <b id="dropTitle">Drop a file or archive</b>
+              <small id="dropSub">Its SHA-256 becomes the target</small>
+            </label>
+          </div>
+          <div class="tpanel" data-t="test">
+            <label class="fld">
+              <span>Plain password (a–z, 0–9) — for rehearsals</span>
+              <div class="row">
+                <input id="testPw" maxlength="10" spellcheck="false" autocomplete="off" placeholder="e.g. pdc2026">
+                <button class="btn ghost sm" id="randPw" title="Random password">🎲</button>
+              </div>
+            </label>
+          </div>
+          <div class="hash-preview mono" id="hashPreview">No target yet</div>
+
+          <div class="two">
+            <label class="fld">
+              <span>Password length <b id="lenVal">7</b></span>
+              <input type="range" id="lenInput" min="1" max="10" value="7">
+            </label>
+            <label class="fld">
+              <span>Chunk size</span>
+              <select id="chunkInput">
+                <option value="1000000">1 M</option>
+                <option value="10000000">10 M</option>
+                <option value="50000000">50 M</option>
+                <option value="100000000">100 M</option>
+                <option value="250000000">250 M</option>
+                <option value="500000000" selected>500 M</option>
+                <option value="1000000000">1 B</option>
+                <option value="5000000000">5 B</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="ks">
+            <div><small>Keyspace 36<sup id="ksL">7</sup></small><b class="mono" id="ksSize">—</b></div>
+            <div><small>Chunks</small><b class="mono" id="ksChunks">—</b></div>
+            <div><small>ETA @ cluster</small><b class="mono" id="ksEta">—</b></div>
+          </div>
+
+          <div class="hyps">
+            <div class="hyp" id="hyp1"><b>H1</b><div><span>Hardware-agnostic acceleration</span><small>—</small></div></div>
+            <div class="hyp" id="hyp2"><b>H2</b><div><span>Fault tolerance</span><small>—</small></div></div>
+            <div class="hyp" id="hyp3"><b>H3</b><div><span>Dynamic load balancing</span><small>—</small></div></div>
+          </div>
+
+          <div class="actions">
+            <button class="btn primary" id="startBtn"><svg viewBox="0 0 24 24"><path d="M7 5v14l12-7z" fill="currentColor"/></svg><span>Start</span></button>
+            <button class="btn" id="pauseBtn"><svg viewBox="0 0 24 24"><path d="M7 5h4v14H7zm6 0h4v14h-4z" fill="currentColor"/></svg><span>Pause</span></button>
+            <button class="btn ghost" id="resetBtn" title="Reset job"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.7M4 4v5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </article>
+
+        <!-- KPIs -->
+        <div class="kpis">
+          <article class="card glass kpi kpi-hero">
+            <small>Cluster throughput</small>
+            <div class="big mono"><span id="kThr">0</span><em id="kThrU">MH/s</em></div>
+            <div class="spark-wrap" id="kSpark"></div>
+          </article>
+          <article class="card glass kpi">
+            <small>Keyspace scanned</small>
+            <div class="mid mono" id="kScan">0.00%</div>
+            <div class="bar"><i id="kScanBar"></i></div>
+            <span class="foot mono" id="kScanAbs">0 / 0</span>
+          </article>
+          <article class="card glass kpi">
+            <small>Chunks</small>
+            <div class="mid mono"><span id="kDone">0</span><em> / <span id="kTotal">0</span></em></div>
+            <div class="chips">
+              <span class="chip c-pend"><i></i><b id="kPend">0</b> pending</span>
+              <span class="chip c-fly"><i></i><b id="kFly">0</b> in-flight</span>
+              <span class="chip c-rec"><i></i><b id="kRec">0</b> recovering</span>
+            </div>
+          </article>
+          <article class="card glass kpi">
+            <small>Load-balance efficiency</small>
+            <div class="mid mono" id="kEff">—</div>
+            <span class="foot">H3 target &gt; 90%</span>
+          </article>
+          <article class="card glass kpi">
+            <small>Elapsed</small>
+            <div class="mid mono" id="kTime">00:00.00</div>
+            <span class="foot mono" id="kEta">ETA —</span>
+          </article>
+        </div>
+
+        <!-- Topology -->
+        <article class="card glass topo-card">
+          <header class="card-h"><h2>Cluster</h2><span class="hint" id="topoHint">Heartbeats every 500 ms</span></header>
+          <div class="topo" id="topo"></div>
+        </article>
+
+        <!-- Keyspace strip -->
+        <article class="card glass strip-card">
+          <header class="card-h">
+            <h2>Keyspace</h2>
+            <span class="hint mono" id="stripHint">[0, 36^L)</span>
+          </header>
+          <div class="strip" id="strip"></div>
+          <div class="legend" id="legend"></div>
+        </article>
+
+        <!-- Node table -->
+        <article class="card glass nodes-card">
+          <header class="card-h"><h2>Live nodes</h2><span class="hint" id="nodesHint"></span></header>
+          <div class="ntable" id="ntable"></div>
+        </article>
+
+        <!-- Fault tolerance -->
+        <article class="card glass fault-card">
+          <header class="card-h"><h2>Fault tolerance</h2><span class="hint">H2 · live demo</span></header>
+          <div class="fault-actions">
+            <label class="fld"><span>Worker</span>
+              <select id="killSel"></select>
+            </label>
+            <button class="btn danger" id="killBtn">Kill worker</button>
+            <button class="btn danger ghost" id="killMasterBtn">Kill Master</button>
+          </div>
+          <div class="recov" id="recov"><p class="empty">No recoveries yet. Kill a node mid-run to watch its chunk roll back to the last checkpoint and move to a healthy laptop.</p></div>
+        </article>
+
+        <!-- Event log -->
+        <article class="card glass log-card">
+          <header class="card-h"><h2>Event log</h2><span class="hint">Master view</span></header>
+          <ol class="log mono" id="log"></ol>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================================================= NODES -->
+    <section id="view-nodes" class="view">
+      <div class="view-h">
+        <div>
+          <h1>Nodes</h1>
+          <p>Up to 5 laptops. Pick each one's role and whether it hashes on the GPU (OpenCL) or CPU (OpenMP + SIMD with Anti-Choke).</p>
+        </div>
+        <button class="btn primary" id="addNodeBtn">+ Add laptop</button>
+      </div>
+      <div class="ncards" id="ncards"></div>
+    </section>
+
+    <!-- ================================================= BENCHMARKS -->
+    <section id="view-bench" class="view">
+      <div class="view-h">
+        <div>
+          <h1>Benchmarks</h1>
+          <p id="benchMachine">Measured W10 baseline</p>
+        </div>
+      </div>
+      <div class="hl">
+        <article class="card glass hl-i"><b class="mono" id="hlGpu">85.1×</b><small>GPU speedup vs serial · CPU load ~2% (H1)</small></article>
+        <article class="card glass hl-i"><b class="mono" id="hlWeak">94.88%</b><small>Weak-scaling efficiency on 4 nodes (H3 &gt; 90%)</small></article>
+        <article class="card glass hl-i"><b class="mono" id="hlLb">96.06%</b><small>Load balance across 4 different laptops</small></article>
+      </div>
+      <div class="bgrid">
+        <article class="card glass b-wide">
+          <header class="card-h"><h2>Serial vs OpenMP SIMD vs OpenCL GPU</h2><span class="hint">MH/s, log scale</span></header>
+          <div id="chartBackends"></div>
+        </article>
+        <article class="card glass">
+          <header class="card-h"><h2>Strong scaling</h2><span class="hint">2M hashes, CPU threads</span></header>
+          <div id="chartStrong"></div>
+          <div class="ckey"><span class="k-teal">Measured speedup</span><span class="k-ideal">Ideal (linear)</span></div>
+        </article>
+        <article class="card glass">
+          <header class="card-h"><h2>Weak scaling</h2><span class="hint">1M hashes per node</span></header>
+          <div id="chartWeak"></div>
+          <div class="ckey"><span class="k-indigo">Efficiency</span><span class="k-ref">H3 target 90%</span></div>
+        </article>
+        <article class="card glass b-wide">
+          <header class="card-h"><h2>Raw results</h2><span class="hint">src_w10/results_w10_scaling.csv</span></header>
+          <div class="tbl-wrap" id="benchTable"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Result overlay -->
+  <div class="overlay" id="result" hidden>
+    <div class="result glass">
+      <div class="r-badge">🔑 Password recovered</div>
+      <div class="r-pw mono" id="rPw">--------</div>
+      <div class="r-grid">
+        <div><small>Keyspace index</small><b class="mono" id="rIdx">—</b></div>
+        <div><small>Found by</small><b id="rNode">—</b></div>
+        <div><small>Total time</small><b class="mono" id="rTime">—</b></div>
+        <div><small>Hashes computed</small><b class="mono" id="rHashes">—</b></div>
+      </div>
+      <div class="r-hash mono" id="rHash"></div>
+      <div class="actions center">
+        <button class="btn" id="rClose">Back to dashboard</button>
+        <button class="btn primary" id="rReset">New run</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="overlay" id="settings" hidden>
+    <form class="dialog glass" id="settingsForm">
+      <h2>Backend</h2>
+      <p class="muted">The web app runs on the Master laptop's local port. Other laptops open <span class="mono">http://&lt;master-ip&gt;:8000</span>.</p>
+      <div class="seg" id="modeSeg">
+        <button type="button" data-m="auto">Auto</button>
+        <button type="button" data-m="live">Live</button>
+        <button type="button" data-m="demo">Demo simulator</button>
+      </div>
+      <label class="fld"><span>Master backend URL</span><input id="urlInput" class="mono" placeholder="http://192.168.1.10:8000"></label>
+      <div class="actions end">
+        <button type="button" class="btn ghost" id="setCancel">Cancel</button>
+        <button type="submit" class="btn primary">Save &amp; reconnect</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="js/sha256.js"></script>
+  <script src="js/keyspace.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/simulator.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
